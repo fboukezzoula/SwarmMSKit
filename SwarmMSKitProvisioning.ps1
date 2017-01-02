@@ -1,4 +1,4 @@
-﻿# SwarmMSKit v1.0.0.0 
+# SwarmMSKit v1.0.0.0 
 # Author : Fouzi BOUKEZZOULA
 #
 # GitHub, Twitter, Facebook : @fboukezzoula
@@ -58,7 +58,7 @@ $global:VMRam                 = 2048MB
 
 # AD Credential which will be the admin NanoServer account
 $global:Username              = "FBOUKEZZOULA\Administrateur"
-$global:clearadminPassword    = "24WhNone09"
+$global:clearadminPassword    = "YourPassword"
 
 $global:DomainName            = "FBOUKEZZOULA"
 
@@ -75,6 +75,8 @@ $global:SwarmClusterPort = "2017"
 
 $LastOctetAdress = $IPAddress.Split('.')
 $NextIP = [int]($LastOctetAdress[-1]) 
+
+$global:InterfaceNameOrIndex = (Get-NetAdapter | Where-Object {$_.Name -eq "vEthernet ($global:VMSwitch)"}).ifIndex
 
 $global:ClusterMembers = [System.Collections.ArrayList]@("$IPAddress")
 $global:ContainerIPAdress = [System.Collections.ArrayList]@("")
@@ -117,7 +119,7 @@ Function global:ClusterNodeCreation {
 
     $global:ContainerIPAdress[0]="$ContainerIPNodeCreate"   
     
-    NewNanoServerImage-Domain $global:ServicingPackages $global:VMPath $global:WorkDir $global:adminPassword $global:MediaPath $ContainerHostNameNodeCreate $ContainerIPNodeCreate $global:GatewayAddress $global:SubnetMask $global:DNSAddresses $global:DomainName | Out-Host | Out-Null
+    NewNanoServerImage-Domain $global:ServicingPackages $global:VMPath $global:WorkDir $global:adminPassword $global:MediaPath $ContainerHostNameNodeCreate $global:InterfaceNameOrIndex $ContainerIPNodeCreate $global:GatewayAddress $global:SubnetMask $global:DNSAddresses $global:DomainName | Out-Host | Out-Null
        
     Create-Set-VM-Hyper-V $global:VMSwitch $global:VMPath $ContainerHostNameNodeCreate $global:VMProcessor $global:VMRam | Out-Host | Out-Null
     Enabled-Start-VM-Hyper-V $ContainerHostNameNodeCreate  | Out-Host | Out-Null 
