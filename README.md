@@ -2,7 +2,7 @@
 
 1. [Overview](#overview)
 
-2. [SwarmMSKit Description - What the module does and why it is useful](#SwarmMSKit-description)
+2. [SwarmMSKit Description - What the tool does and why it is useful](#SwarmMSKit-description)
 3. [Setup - The basics of getting started with SwarmMSKit]
     * [Setup requirements](#setup-requirements)
     * [Beginning with SwarmMSKit](#beginning-SwarmMSKit)
@@ -64,6 +64,7 @@ AD Credential which will be the admin NanoServer account
 * DomainName            = "FBOUKEZZOULA"
 
 Name (Netbios/Hostname of the NanoServer and AD coputer Names; Name in Hyper-V)
+
 * ContainerHostName = "Nano-"
 
 Number of tour Cluster Swarm members 
@@ -108,6 +109,9 @@ youtube channel
 -----
 
 Stay tunned, very soon ...
+
+Meanwhile, have a look on the screenshots (folder pics)
+
 
 
 
