@@ -1,4 +1,4 @@
-﻿Set-StrictMode -version 3
+Set-StrictMode -version 3
 $ErrorActionPreference = "Stop"
 
 
@@ -29,6 +29,7 @@ Function global:NewNanoServerImage-Domain  {
     $adminPassword,
     [String]$MediaPath,
     [String]$ContainerHostName,
+    [int]$InterfaceNameOrIndex, 
     [String]$IPAddress, 
     [String]$GatewayAddress, 
     [String]$SubnetMask, 
@@ -53,7 +54,7 @@ Function global:NewNanoServerImage-Domain  {
                 -BasePath $WorkDir\Base `
                 -TargetPath $WorkDir\VHD_Files\$ContainerHostName.vhd `
                 -MaxSize 10GB `
-                -InterfaceNameOrIndex 2 -Ipv4Address $IPAddress -Ipv4SubnetMask $SubnetMask -Ipv4Gateway $GatewayAddress -Ipv4Dns $DNSAddresses `
+                -InterfaceNameOrIndex $InterfaceNameOrIndex -Ipv4Address $IPAddress -Ipv4SubnetMask $SubnetMask -Ipv4Gateway $GatewayAddress -Ipv4Dns $DNSAddresses `
                 -Containers -Compute -EnableRemoteManagementPort -SetupCompleteCommand @("set LOCALAPPDATA=%USERPROFILE%\AppData\Local","PowerShell `"Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force`"","PowerShell `". C:\Windows\Setup\Scripts\NanoSetup.ps1`"")`
                 -DomainBlobPath $DomainBlobPath
 } 
