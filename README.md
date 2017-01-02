@@ -67,10 +67,10 @@ Name (Netbios/Hostname of the NanoServer and AD coputer Names; Name in Hyper-V)
 
 * ContainerHostName = "Nano-"
 
-Number of tour Cluster Swarm members 
+Number of your Cluster Swarm members 
 * ServersInCluster   = 3
 
-Our dedicated TCP POrt for our Cluster Swarm Service
+Our dedicated TCP Port for our Cluster Swarm Service
 * SwarmClusterPort = "2017"
 
 
