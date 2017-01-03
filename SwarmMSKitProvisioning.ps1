@@ -35,19 +35,18 @@ $global:ToolsSource          = "$global:WorkDir\ToolsSource"
 $global:ServicingPackages    = "$global:WorkDir\ServicingPackages"
 
 <#
-We have to create an virtuak internal network switch on Hyper-V. The name of this Virtual Switch is InternalNetwork in this case
+We have to create an virtual internal network switch on Hyper-V. The name of this Virtual Switch is InternalNetwork in this case
 We have set a static IP on this virtual NIC use for this internal network
 The DNS and AD will be use this static @IP and this virtual vlan
 
 Then we set the desire >> first @IP << of our Nanoserver VM of this subnet; which will be the first VM of our Cluster Swarm 
-In this case, the first NanoServer VM odf our Cluster Swarm will have this @IP 10.1.0.24
+In this case, the first NanoServer VM of our Cluster Swarm will have this @IP 10.1.0.24
 #>
 
 $global:IPAddress      = "10.1.0.24"
 $global:GatewayAddress = "10.1.0.1"
 $global:SubnetMask     = "255.255.255.0"
 $global:DNSAddresses   = "10.1.0.1"
-
 
 $global:Subnet         = "10.1.0."
 $global:VMSwitch       = "InternalNetwork"
