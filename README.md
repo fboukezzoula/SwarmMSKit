@@ -14,13 +14,103 @@ overview
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry ... all integrated in an Active Directory Domain and all the VM NanoServer on Hyper-V 
 
+
 SwarmMSKit-description
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V with Consul Hashicorp software as Discovery Service, Vault Hashicorp software as a Secret Management Store and a Private Docker Registry host on Nexus OSS software.
 All VMs are integrated in an Active Directory Domain and all the VM NanoServer will running on Hyper-V.
 
-We use the latest Docker Daemon Engine, Vault, Consul and Nexus OSS versions.
+We use the latest Docker Daemon Engine(1.14.0), Swarm (1.2.6), Vault(0.6.4), Consul(0.7.2) and Nexus OSS (3.2.0-01) versions.
+
+Notice that I've build locally the swarm.exe binary with the latest version of docker/swarm :
+https://github.com/docker/swarm/archive/v1.2.6-rc1.zip
+
+######docker -H tcp://10.1.0.24:2375 version :
+	Client:
+	Version:      1.14.0-dev
+	API version:  1.26
+	Go version:   go1.7.4
+	Git commit:   841968d
+	Built:        Wed Dec 28 22:39:42 2016
+	OS/Arch:      windows/amd64
+
+	Server:
+	Version:      1.14.0-dev
+	API version:  1.26 (minimum version 1.24)
+	Go version:   go1.7.4
+	Git commit:   841968d
+	Built:        Wed Dec 28 22:39:42 2016
+	OS/Arch:      windows/amd64
+	Experimental: false
+ 
+
+######docker -H tcp://10.1.0.24:2017 info
+	Containers: 0
+	Running: 0
+	Paused: 0
+	Stopped: 0
+	Images: 0
+	Server Version: swarm/1.2.6
+	Role: primary
+	Strategy: spread
+	Filters: health, port, containerslots, dependency, affinity, constraint, whitelist
+	Nodes: 2
+	(unknown): 10.1.0.26:2375
+	└ ID:
+	└ Status: Pending
+	└ Containers: 0
+	└ Reserved CPUs: 0 / 0
+	└ Reserved Memory: 0 B / 0 B
+	└ Labels:
+	└ UpdatedAt: 2017-01-03T15:52:08Z
+	└ ServerVersion:
+	(unknown): 10.1.0.25:2375
+	└ ID:
+	└ Status: Pending
+	└ Containers: 0
+	└ Reserved CPUs: 0 / 0
+	└ Reserved Memory: 0 B / 0 B
+	└ Labels:
+	└ UpdatedAt: 2017-01-03T15:52:08Z
+	└ ServerVersion:
+	Plugins:
+	Volume:
+	Network:
+	Swarm:
+	NodeID:
+	Is Manager: false
+	Node Address:
+	Kernel Version: 10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644)
+	Operating System: windows
+	Architecture: amd64
+	CPUs: 0
+	Total Memory: 0 B
+	Name: Nano-Manager-1
+	Docker Root Dir:
+	Debug Mode (client): false
+	Debug Mode (server): false
+	WARNING: No kernel memory limit support
+	Experimental: false
+	Live Restore Enabled: false
+
+######vault status -address=http://10.1.0.24:8200
+	Sealed: true
+	Key Shares: 5
+	Key Threshold: 3
+	Unseal Progress: 0
+	Version: 0.6.4
+
+	High-Availability Enabled: true
+	Mode: sealed
+	
+ 
+######consul members --rpc-addr=10.1.0.24:8400
+	Node            Address         Status  Type    Build  Protocol  DC
+	Nano-Manager-1  10.1.0.24:8301  alive   server  0.7.2  2         nano-swarm
+	Nano-Worker-1   10.1.0.25:8301  alive   client  0.7.2  2         nano-swarm
+	Nano-Worker-2   10.1.0.26:8301  alive   client  0.7.2  2         nano-swarm 
+ 
  
 The Windows Server 2016 has to be updated with the latest KB/Hotfixs.
 
@@ -32,6 +122,11 @@ setup-requirements
 
 Windows 10 Pro or Entreprise Version (need Hyper-V)
 Windows Server 2016 Standard or Datacenter 
+
+Downlaod the folder SwarmMSKit which contain all the necessary binaries (latest KB/Hotfix, consul, vault, docker engine, nexus oss, swarm, nanoserver OSImage, etc ...) :
+
+https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
+
 
 beginning-SwarmMSKit
 -----
@@ -104,6 +199,7 @@ examples :
 
 * docker login -u admin -p admin123 @YourFirstIP:8123
 * docker push nanoserver
+
 
 youtube channel
 -----
