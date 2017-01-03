@@ -23,7 +23,7 @@ All VMs are integrated in an Active Directory Domain and all the VM NanoServer w
 
 We use the latest Docker Daemon Engine(1.14.0), Swarm (1.2.6), Vault(0.6.4), Consul(0.7.2) and Nexus OSS (3.2.0-01) versions.
 
-Notice that I've build locally the swarm.exe binary with the latest version of docker/swarm :
+Notice that I've built locally the swarm.exe binary with the latest version of docker/swarm :
 https://github.com/docker/swarm/archive/v1.2.6-rc1.zip
 
 ######docker -H tcp://10.1.0.24:2375 version :
@@ -46,53 +46,34 @@ https://github.com/docker/swarm/archive/v1.2.6-rc1.zip
  
 
 ######docker -H tcp://10.1.0.24:2017 info
-	Containers: 0
+	Containers: 1
 	Running: 0
 	Paused: 0
-	Stopped: 0
-	Images: 0
+	Stopped: 1
+	Images: 2
 	Server Version: swarm/1.2.6
 	Role: primary
 	Strategy: spread
 	Filters: health, port, containerslots, dependency, affinity, constraint, whitelist
 	Nodes: 2
-	(unknown): 10.1.0.26:2375
-	└ ID:
-	└ Status: Pending
-	└ Containers: 0
-	└ Reserved CPUs: 0 / 0
-	└ Reserved Memory: 0 B / 0 B
-	└ Labels:
-	└ UpdatedAt: 2017-01-03T15:52:08Z
-	└ ServerVersion:
-	(unknown): 10.1.0.25:2375
-	└ ID:
-	└ Status: Pending
-	└ Containers: 0
-	└ Reserved CPUs: 0 / 0
-	└ Reserved Memory: 0 B / 0 B
-	└ Labels:
-	└ UpdatedAt: 2017-01-03T15:52:08Z
-	└ ServerVersion:
-	Plugins:
-	Volume:
-	Network:
-	Swarm:
-	NodeID:
-	Is Manager: false
-	Node Address:
-	Kernel Version: 10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644)
-	Operating System: windows
-	Architecture: amd64
-	CPUs: 0
-	Total Memory: 0 B
-	Name: Nano-Manager-1
-	Docker Root Dir:
-	Debug Mode (client): false
-	Debug Mode (server): false
-	WARNING: No kernel memory limit support
-	Experimental: false
-	Live Restore Enabled: false
+	Nano-Worker-1: 10.1.0.25:2375
+	└ ID: WTTJ:O36X:BCVK:UF3I:ZPG7:H6KH:HRXE:E52E:IZU3:VY6W:3KHV:YYAT
+	└ Status: Healthy
+	└ Containers: 1 (0 Running, 0 Paused, 1 Stopped)
+	└ Reserved CPUs: 0 / 2
+	└ Reserved Memory: 0 B / 2.1 GiB
+	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	└ UpdatedAt: 2017-01-03T16:22:12Z
+	└ ServerVersion: 1.14.0-dev
+	Nano-Worker-2: 10.1.0.26:2375
+	└ ID: W4LK:ODLT:XYBL:DF7J:LOBJ:CU6G:CT2U:EAN6:UTGF:2VKM:JS52:7BNB
+	└ Status: Healthy
+	└ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
+	└ Reserved CPUs: 0 / 2
+	└ Reserved Memory: 0 B / 2.1 GiB
+	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	└ UpdatedAt: 2017-01-03T16:21:35Z
+	└ ServerVersion: 1.14.0-dev
 
 ######vault status -address=http://10.1.0.24:8200
 	Sealed: true
