@@ -206,7 +206,7 @@ Function global:Enabled-Start-VM-Hyper-V {
 
             {
                 Enable-VMIntegrationService -Name $_.name -VM $v
-                Start-VM –Name $VMName
+                Start-VM -Name $VMName
             }
         } 
         
