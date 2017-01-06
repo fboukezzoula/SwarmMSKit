@@ -112,74 +112,66 @@ https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
 beginning-SwarmMSKit
 -----
 
-Set constants/variables in the SwarmMSKitProvisioning.ps1 file :
+######Set constants/variables in the SwarmMSKitProvisioning.ps1 file :
+	WorkDir              = "C:\SwarmMSKit"
+	VMPath               = "$global:WorkDir\VHD_Files"
+	MediaPath            = "$global:WorkDir\W2K16"
+	ToolsSource          = "$global:WorkDir\ToolsSource"
+	ServicingPackages    = "$global:WorkDir\ServicingPackages"
 
-* WorkDir              = "C:\SwarmMSKit"
-* VMPath               = "$global:WorkDir\VHD_Files"
-* MediaPath            = "$global:WorkDir\W2K16"
-* ToolsSource          = "$global:WorkDir\ToolsSource"
-* ServicingPackages    = "$global:WorkDir\ServicingPackages"
+######IP Configuration of your first VM NanoServer and VM Switch Hyper-V configuration :
 
+	IPAddress      = "10.1.0.24"
+	GatewayAddress = "10.1.0.1"
+	SubnetMask     = "255.255.255.0"
+	DNSAddresses   = "10.1.0.1"
+	Subnet         = "10.1.0."
+	VMSwitch       = "InternalNetwork"
 
-IP Configuration of your first VM NanoServer and VM Switch Hyper-V configuration :
+######System Configuration for our NanoServer VM, 2 vCPU and 2 Go Ram
+	VMProcessor           = 2
+	VMRam                 = 2048MB
 
-* IPAddress      = "10.1.0.24"
-* GatewayAddress = "10.1.0.1"
-* SubnetMask     = "255.255.255.0"
-* DNSAddresses   = "10.1.0.1"
-* Subnet         = "10.1.0."
-* VMSwitch       = "InternalNetwork"
+######AD Credential which will be the admin NanoServer account
+	Username              = "FBOUKEZZOULA\Administrateur"
+	clearadminPassword    = "YourPassWord"
+	DomainName            = "FBOUKEZZOULA"
 
-System Configuration for our NanoServer VM, 2 vCPU and 2 Go Ram
-* VMProcessor           = 2
-* VMRam                 = 2048MB
+######Name prefix (Netbios/Hostname of the NanoServer and AD computer Names & Name in Hyper-V : Nano-Manager-1, Nano-Worker-1, Nano-Worker-2, etc...)
+	ContainerHostName = "Nano-"
 
-AD Credential which will be the admin NanoServer account
-* Username              = "FBOUKEZZOULA\Administrateur"
-* clearadminPassword    = "YourPassWord"
-* DomainName            = "FBOUKEZZOULA"
+######Number of your Cluster Swarm members 
+	ServersInCluster   = 3
 
-Name (Netbios/Hostname of the NanoServer and AD coputer Names; Name in Hyper-V)
-
-* ContainerHostName = "Nano-"
-
-Number of your Cluster Swarm members 
-* ServersInCluster   = 3
-
-Our dedicated TCP Port for our Cluster Swarm Service
-* SwarmClusterPort = "2017"
+######Our dedicated TCP Port for our Cluster Swarm Service
+	SwarmClusterPort = "2017"
 
 
 usage
 -----
 
-* Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
-or 
-* Set-ExecutionPolicy Unrestricted
+######ExecutionPolicy
+	Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
+	or
+	Set-ExecutionPolicy Unrestricted
 
-To connect to our new NanoServer VM with WinRM protocol :
-
-* Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
-* Restart-Service winrm
+######Connect to the new NanoServer VM with WinRM protocol :
+	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
+	Restart-Service winrm
 
 Then run the SwarmMSKitProvisioning.ps1 file ...
-
 
 When it's finish ...
 
 * set DOCKER_HOST=tcp://@YourFirstIP:@YourClusterSwarmPort
 
-examples :
-
-* set DOCKER_HOST=tcp://10.1.0.24:2017
-
-* docker images
-
-* docker run -it nanoserver powershell
-* docker run -it nanoserver cmd
-
-* docker login -u admin -p admin123 @YourFirstIP:8123
-* docker push nanoserver
+######Examples :
+	set DOCKER_HOST=tcp://10.1.0.24:2017
+	docker images
+	docker run -it nanoserver powershell
+	docker run -it nanoserver cmd
+	docker login -u admin -p admin123 @YourFirstIP:8123
+	docker push nanoserver
 
 
 youtube channel
