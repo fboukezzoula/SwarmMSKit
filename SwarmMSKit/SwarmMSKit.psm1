@@ -206,7 +206,7 @@ Function global:Enabled-Start-VM-Hyper-V {
 
             {
                 Enable-VMIntegrationService -Name $_.name -VM $v
-                Start-VM â€“Name $VMName
+                Start-VM –Name $VMName
             }
         } 
         
@@ -476,3 +476,4 @@ Function global:SwarmMSKit-Private-Registry {
 
     
 }
+
