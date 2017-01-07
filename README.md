@@ -1,21 +1,24 @@
+![ScreenShot](https://raw.githubusercontent.com/fboukezzoula/SwarmMSKit/master/pics/logoSwarmMSKit.png)
+
+
 # SwarmMSKit
 
-1. [Overview](#overview)
+1. [Overview](#SwarmMSKit - Overview)
 
-2. [SwarmMSKit Description - What the tool does and why it is useful](#SwarmMSKit-description)
+2. [SwarmMSKit Description - What the tool does and why it is useful](#SwarmMSKit - Description)
 3. [Setup - The basics of getting started with SwarmMSKit]
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with SwarmMSKit](#beginning-SwarmMSKit)
-4. [Usage - SwarmMSKit](#usage)
-5. [Video Tutorial](#youtube channel)
+    * [Setup requirements](#SwarmMSKit - Setup requirements)
+    * [Beginning with SwarmMSKit](#SwarmMSKit - Beginning)
+4. [Usage - SwarmMSKit](#SwarmMSKit - Usage)
+5. [Video Tutorial](#SwarmMSKit - Youtube channel)
 
-overview
+SwarmMSKit - Overview
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry ... all integrated in an Active Directory Domain and all the VM NanoServer on Hyper-V 
 
 
-SwarmMSKit-description
+SwarmMSKit - Description
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V with Consul Hashicorp software as Discovery Service, Vault Hashicorp software as a Secret Management Store and a Private Docker Registry host on Nexus OSS software.
@@ -98,7 +101,7 @@ The Windows Server 2016 has to be updated with the latest KB/Hotfixs.
 For the NanoServer VHD, we will install these KB/Hotfixes too.
 
 
-setup-requirements
+SwarmMSKit - Setup requirements
 -----
 
 Windows 10 Pro or Entreprise Version (need Hyper-V)
@@ -109,7 +112,7 @@ Downlaod the folder SwarmMSKit which contain all the necessary binaries (latest 
 https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
 
 
-beginning-SwarmMSKit
+SwarmMSKit - Beginning
 -----
 
 ######Set constants/variables in the SwarmMSKitProvisioning.ps1 file :
@@ -147,7 +150,7 @@ beginning-SwarmMSKit
 	SwarmClusterPort = "2017"
 
 
-usage
+SwarmMSKit - Usage
 -----
 
 ######ExecutionPolicy
@@ -174,7 +177,7 @@ When it's finish ...
 	docker push nanoserver
 
 
-youtube channel
+SwarmMSKit - Youtube channel
 -----
 
 Stay tunned, very soon ...
