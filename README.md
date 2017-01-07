@@ -3,22 +3,22 @@
 
 # SwarmMSKit
 
-1. [Overview](#SwarmMSKit - Overview)
+1. [Overview](#SwarmMSKit-Overview)
 
-2. [SwarmMSKit Description - What the tool does and why it is useful](#SwarmMSKit - Description)
+2. [SwarmMSKit Description - What the tool does and why it is useful](#SwarmMSKit-Description)
 3. [Setup - The basics of getting started with SwarmMSKit]
-    * [Setup requirements](#SwarmMSKit - Setup requirements)
-    * [Beginning with SwarmMSKit](#SwarmMSKit - Beginning)
-4. [Usage - SwarmMSKit](#SwarmMSKit - Usage)
-5. [Video Tutorial](#SwarmMSKit - Youtube channel)
+    * [Setup requirements](#SwarmMSKit-Setup-requirements)
+    * [Beginning with SwarmMSKit](#SwarmMSKit-Beginning)
+4. [Usage - SwarmMSKit](#SwarmMSKit-Usage)
+5. [Video Tutorial](#SwarmMSKit-Youtube channel)
 
-SwarmMSKit - Overview
+SwarmMSKit-Overview
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry ... all integrated in an Active Directory Domain and all the VM NanoServer on Hyper-V 
 
 
-SwarmMSKit - Description
+SwarmMSKit-Description
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V with Consul Hashicorp software as Discovery Service, Vault Hashicorp software as a Secret Management Store and a Private Docker Registry host on Nexus OSS software.
@@ -101,7 +101,7 @@ The Windows Server 2016 has to be updated with the latest KB/Hotfixs.
 For the NanoServer VHD, we will install these KB/Hotfixes too.
 
 
-SwarmMSKit - Setup requirements
+SwarmMSKit-Setup requirements
 -----
 
 Windows 10 Pro or Entreprise Version (need Hyper-V)
@@ -150,7 +150,7 @@ SwarmMSKit - Beginning
 	SwarmClusterPort = "2017"
 
 
-SwarmMSKit - Usage
+SwarmMSKit-Usage
 -----
 
 ######ExecutionPolicy
@@ -177,7 +177,7 @@ When it's finish ...
 	docker push nanoserver
 
 
-SwarmMSKit - Youtube channel
+SwarmMSKit-Youtube channel
 -----
 
 Stay tunned, very soon ...
