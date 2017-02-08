@@ -15,19 +15,27 @@
 SwarmMSKit-Overview
 -----
 
-Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry ... all integrated in an Active Directory Domain and all the VM NanoServer on Hyper-V 
+Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry + Management UI for your cluster ... all the VMs can be integrated in an Active Directory Domain or you can use a Local account. 
 
 
 SwarmMSKit-Description
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V with Consul Hashicorp software as Discovery Service, Vault Hashicorp software as a Secret Management Store and a Private Docker Registry host on Nexus OSS software.
-All VMs are integrated in an Active Directory Domain and all the VM NanoServer will running on Hyper-V.
 
-We use the latest Docker Daemon Engine(1.14.0), Swarm (1.2.6), Vault(0.6.4), Consul(0.7.2) and Nexus OSS (3.2.0-01) versions.
+All VMs can be integrated in an Active Directory Domain during the provisioning or you can use a local windows account.
+
+All the VM NanoServer will running on Hyper-V.
+
+All the VMs NanoServer will be up to date (latest KBs/Hotfixs) and will hosted the last docker OSImage nanoserver (microsoft/nanoserver, nanoserver tagged). 
+
+You can disable the Microsoft Firewall or use the Firewall : the SwarmMSKit will create for you all the firewall rules (more than 16 rules) for enabled the access to the Docker Daemon, Swarm, Consul, Vault, Private Registry, Management UI, WinRM, File Sharing, etc ....
+
+We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the exe file with the Docker swarm repo), Vault(0.6.4), Consul(0.7.2) and Nexus OSS (3.2.0-01) versions.
 
 Notice that I've built locally the swarm.exe binary with the latest version of docker/swarm :
-https://github.com/docker/swarm/archive/v1.2.6-rc1.zip
+https://github.com/docker/swarm/releases/tag/v1.2.6
+
 
 ######docker -H tcp://10.1.0.24:2375 version :
 	Client:
@@ -49,51 +57,73 @@ https://github.com/docker/swarm/archive/v1.2.6-rc1.zip
  
 
 ######docker -H tcp://10.1.0.24:2017 info
-	Containers: 1
-	Running: 0
-	Paused: 0
-	Stopped: 1
+	Containers: 0
+	 Running: 0
+	 Paused: 0
+	 Stopped: 0
 	Images: 2
 	Server Version: swarm/1.2.6
 	Role: primary
 	Strategy: spread
 	Filters: health, port, containerslots, dependency, affinity, constraint, whitelist
 	Nodes: 2
-	Nano-Worker-1: 10.1.0.25:2375
-	└ ID: WTTJ:O36X:BCVK:UF3I:ZPG7:H6KH:HRXE:E52E:IZU3:VY6W:3KHV:YYAT
-	└ Status: Healthy
-	└ Containers: 1 (0 Running, 0 Paused, 1 Stopped)
-	└ Reserved CPUs: 0 / 2
-	└ Reserved Memory: 0 B / 2.1 GiB
-	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
-	└ UpdatedAt: 2017-01-03T16:22:12Z
-	└ ServerVersion: 1.14.0-dev
-	Nano-Worker-2: 10.1.0.26:2375
-	└ ID: W4LK:ODLT:XYBL:DF7J:LOBJ:CU6G:CT2U:EAN6:UTGF:2VKM:JS52:7BNB
-	└ Status: Healthy
-	└ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
-	└ Reserved CPUs: 0 / 2
-	└ Reserved Memory: 0 B / 2.1 GiB
-	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
-	└ UpdatedAt: 2017-01-03T16:21:35Z
-	└ ServerVersion: 1.14.0-dev
+	 Nano-Worker-01: 10.1.0.25:2375
+	  └ ID: 6WOI:CJAO:QPL2:D7ID:XD4M:RAQ3:O4AM:374O:GEC6:V2FW:YYUX:APNF
+	  └ Status: Healthy
+	  └ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
+	  └ Reserved CPUs: 0 / 4
+	  └ Reserved Memory: 0 B / 2.1 GiB
+	  └ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	  └ UpdatedAt: 2017-02-08T15:51:52Z
+	  └ ServerVersion: 1.13.0
+	 Nano-Worker-02: 10.1.0.26:2375
+	  └ ID: JVFE:5MS7:XRWC:OQA4:2QZJ:LUBA:GRIJ:AHRX:5SM7:YA25:LXGC:VLXK
+	  └ Status: Healthy
+	  └ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
+	  └ Reserved CPUs: 0 / 4
+	  └ Reserved Memory: 0 B / 2.1 GiB
+	  └ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	  └ UpdatedAt: 2017-02-08T15:51:44Z
+	  └ ServerVersion: 1.13.0
+	Plugins:
+	 Volume:
+	 Network:
+	Swarm:
+	 NodeID:
+	 Is Manager: false
+	 Node Address:
+	Kernel Version: 10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644)
+	Operating System: windows
+	Architecture: amd64
+	CPUs: 8
+	Total Memory: 4.199 GiB
+	Name: Nano-Manager-01
+	Docker Root Dir:
+	Debug Mode (client): false
+	Debug Mode (server): false
+	WARNING: No kernel memory limit support
+	Experimental: false
+	Live Restore Enabled: false
 
 ######vault status -address=http://10.1.0.24:8200
-	Sealed: true
+	Sealed: false
 	Key Shares: 5
 	Key Threshold: 3
 	Unseal Progress: 0
 	Version: 0.6.4
+	Cluster Name: vault-cluster-80d388b2
+	Cluster ID: 43494c69-f954-aab3-47d1-6663bc1c6c1f
 
 	High-Availability Enabled: true
-	Mode: sealed
+		Mode: active
+		Leader: http://10.1.0.24:8200
 	
  
 ######consul members --rpc-addr=10.1.0.24:8400
-	Node            Address         Status  Type    Build  Protocol  DC
-	Nano-Manager-1  10.1.0.24:8301  alive   server  0.7.2  2         nano-swarm
-	Nano-Worker-1   10.1.0.25:8301  alive   client  0.7.2  2         nano-swarm
-	Nano-Worker-2   10.1.0.26:8301  alive   client  0.7.2  2         nano-swarm 
+	Node             Address         Status  Type    Build  Protocol  DC
+	Nano-Manager-01  10.1.0.24:8301  alive   server  0.7.2  2         nano-swarm
+	Nano-Worker-01   10.1.0.25:8301  alive   client  0.7.2  2         nano-swarm
+	Nano-Worker-02   10.1.0.26:8301  alive   client  0.7.2  2         nano-swarm
  
  
 The Windows Server 2016 has to be updated with the latest KB/Hotfixs.
