@@ -125,10 +125,22 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 	Nano-Worker-01   10.1.0.25:8301  alive   client  0.7.2  2         nano-swarm
 	Nano-Worker-02   10.1.0.26:8301  alive   client  0.7.2  2         nano-swarm
  
- 
-The Windows Server 2016 has to be updated with the latest KB/Hotfixs.
 
-For the NanoServer VHD, we will install these KB/Hotfixes too.
+For the NanoServer VHD reference, we will use the latest and official Microsoft Nanoserver VHD :
+
+
+
+
+We prepare it (mount/unmount with dism tool) for injecting the latest KB/Hotfixs, binaries, windows features (compute, 
+
+######Initial Installation of Docker in the NanoServer (already done)
+	Install-Module -Name DockerMsftProvider -Repository PSGallery -Force
+	Install-Package -Name docker -ProviderName DockerMsftProvider
+	Restart-computer -force
+	Import-Module DockerMsftProvider
+	start-service docker
+	docker pull microsoft/nanoserver
+	docker tag microsoft/nanoserver nanoserver
 
 
 SwarmMSKit-Setup requirements
