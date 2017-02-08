@@ -159,29 +159,26 @@ Windows Server 2016 Standard or Datacenter
 
 Powershell Version v3 or higher
 
-Clone this 
+Clone this SwarmMSKit (unzip it on a folder called for example "SwarMSKit") :
+https://github.com/fboukezzoula/SwarmMSKit/archive/master.zip
 
-Download the NanoServerDataCenter.vhd file from this Google Drive address :
-
+Then download the NanoServerDataCenter.vhd file from this Google Drive address :
 https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
 
-And that's it !
+in a folder (parameter: $global:Model_NanoServerDataCenter)
 
-
-
+And that's it, you are ready to deploy your Cluster Swarm Full MS NanoServer !
 
 SwarmMSKit - Beginning
 -----
 
 ######Set constants/variables in the SwarmMSKitProvisioning.ps1 file :
-	WorkDir              = "C:\SwarmMSKit"
-	VMPath               = "$global:WorkDir\VHD_Files"
-	MediaPath            = "$global:WorkDir\W2K16"
-	ToolsSource          = "$global:WorkDir\ToolsSource"
-	ServicingPackages    = "$global:WorkDir\ServicingPackages"
+	$global:WorkDir                               = "C:\SwarmMSKit"
+	$global:VMPath                                = "$global:WorkDir\VHD_Files"
+	$global:Model_NanoServerDataCenter            = "$global:WorkDir\VHD_Reference\NanoServerDataCenter.vhd"
+	$global:ToolsSource                           = "$global:WorkDir\ToolsSource"	
 
-######IP Configuration of your first VM NanoServer and VM Switch Hyper-V configuration :
-
+######IP Configuration of your first VM NanoServer and your VM Switch Hyper-V configuration :
 	IPAddress      = "10.1.0.24"
 	GatewayAddress = "10.1.0.1"
 	SubnetMask     = "255.255.255.0"
@@ -189,22 +186,20 @@ SwarmMSKit - Beginning
 	Subnet         = "10.1.0."
 	VMSwitch       = "InternalNetwork"
 
-######System Configuration for our NanoServer VM, 2 vCPU and 2 Go Ram
+######System Configuration for our NanoServer VM, (below, we will set 2 vCPU and 2 Go RAM for each VM) :
 	VMProcessor           = 2
 	VMRam                 = 2048MB
 
-######AD Credential which will be the admin NanoServer account
-	Username              = "FBOUKEZZOULA\Administrateur"
-	clearadminPassword    = "YourPassWord"
-	DomainName            = "FBOUKEZZOULA"
+######Type Of Authentication to the NanoServer : Local Account (default value: Local) or AD Account (AD) ?
+	$global:AuthenticationType = "AD"
 
 ######Name prefix (Netbios/Hostname of the NanoServer and AD computer Names & Name in Hyper-V : Nano-Manager-1, Nano-Worker-1, Nano-Worker-2, etc...)
 	ContainerHostName = "Nano-"
 
-######Number of your Cluster Swarm members 
+######Total Number of your Cluster Swarm Members (total of VMs in Hyper-V) : 
 	ServersInCluster   = 3
 
-######Our dedicated TCP Port for our Cluster Swarm Service
+######Our dedicated TCP Port for our Cluster Swarm Service :
 	SwarmClusterPort = "2017"
 
 
