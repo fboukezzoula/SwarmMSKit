@@ -1,7 +1,7 @@
 ![ScreenShot](https://raw.githubusercontent.com/fboukezzoula/SwarmMSKit/master/pics/logoSwarmMSKit.png)
 
 
-# SwarmMSKit : 10 minutes chrono for deploying a full Cluster Swarm Microsoft NanoServer with all tools on Hyper-V ! 
+# SwarmMSKit  
 
 1. [Overview](#SwarmMSKit-Overview)
 
@@ -14,6 +14,8 @@
 
 SwarmMSKit-Overview
 -----
+
+10 minutes for deploying a full Cluster Swarm Microsoft NanoServer with all tools on Hyper-V !
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry + Management UI for your cluster ... all the VMs can be integrated in an Active Directory Domain or you can use a Local account. 
 
