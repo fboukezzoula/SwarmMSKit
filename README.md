@@ -1,7 +1,7 @@
 ![ScreenShot](https://raw.githubusercontent.com/fboukezzoula/SwarmMSKit/master/pics/logoSwarmMSKit.png)
 
 
-# SwarmMSKit
+# SwarmMSKit : 10 minutes chrono for deploying a full Cluster Swarm Microsoft NanoServer with all tools on Hyper-V ! 
 
 1. [Overview](#SwarmMSKit-Overview)
 
