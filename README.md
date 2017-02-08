@@ -127,9 +127,9 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
  
 
 For the NanoServer VHD reference, we will use the latest and official Microsoft Nanoserver VHD :
+https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016
 
-
-
+(you have to signin, accept the licence MS contrat...)
 
 We prepare it (mount/unmount with dism tool) for injecting the latest KB/Hotfixs, binaries, windows features (compute, 
 
