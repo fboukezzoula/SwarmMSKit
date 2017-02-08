@@ -39,21 +39,21 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 
 ######docker -H tcp://10.1.0.24:2375 version :
 	Client:
-	Version:      1.14.0-dev
-	API version:  1.26
-	Go version:   go1.7.4
-	Git commit:   841968d
-	Built:        Wed Dec 28 22:39:42 2016
-	OS/Arch:      windows/amd64
+	 Version:      1.13.0
+	 API version:  1.25
+	 Go version:   go1.7.3
+	 Git commit:   49bf474
+	 Built:        Wed Jan 18 16:20:26 2017
+	 OS/Arch:      windows/amd64
 
 	Server:
-	Version:      1.14.0-dev
-	API version:  1.26 (minimum version 1.24)
-	Go version:   go1.7.4
-	Git commit:   841968d
-	Built:        Wed Dec 28 22:39:42 2016
-	OS/Arch:      windows/amd64
-	Experimental: false
+	 Version:      1.13.0
+	 API version:  1.25 (minimum version 1.24)
+	 Go version:   go1.7.3
+	 Git commit:   49bf474
+	 Built:        Wed Jan 18 16:20:26 2017
+	 OS/Arch:      windows/amd64
+	 Experimental: false
  
 
 ######docker -H tcp://10.1.0.24:2017 info
