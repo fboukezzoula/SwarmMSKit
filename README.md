@@ -199,6 +199,11 @@ SwarmMSKit - Beginning
 ######Total Number of your Cluster Swarm Members (total of VMs in Hyper-V) : 
 	ServersInCluster   = 3
 
+######Set firewall rules for all our Cluster : Docker daemon, swarm, consul, veualt, registry, file sharing, winrm, etc ...
+######if $True  = set each FW rule (more than 16 rules .... secured ;o) !)
+######if $False = we disable the Microsoft Firewall so all the ports ar open inbound/outbound ... not secured !
+	$Firewall = $True
+
 ######Our dedicated TCP Port for our Cluster Swarm Service :
 	SwarmClusterPort = "2017"
 
