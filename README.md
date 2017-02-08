@@ -31,9 +31,9 @@ All the VMs NanoServer will be up to date (latest KBs/Hotfixs) and will hosted t
 
 You can disable the Microsoft Firewall or use the Firewall : the SwarmMSKit will create for you all the firewall rules (more than 16 rules) for enabled the access to the Docker Daemon, Swarm, Consul, Vault, Private Registry, Management UI, WinRM, File Sharing, etc ....
 
-We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the exe file with the Docker swarm repo), Vault(0.6.4), Consul(0.7.2) and Nexus OSS (3.2.0-01) versions.
+We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the swarm.exe file with the official Docker Swarm GitHub source), Vault (0.6.4), Consul (0.7.2) and Nexus OSS (3.2.0-01) versions.
 
-Notice that I've built locally the swarm.exe binary with the latest version of docker/swarm :
+Notice that I've built locally the swarm.exe binary with the latest version of this docker/swarm source codes :
 https://github.com/docker/swarm/releases/tag/v1.2.6
 
 
@@ -129,11 +129,11 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 For the NanoServer VHD reference, we will use the latest and official Microsoft Nanoserver VHD :
 https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016
 
-(you have to SignIn, accept the Microsoft licence ...)
+(you have to SignIn, accept the Microsoft licence and download the VHD file ...)
 
-We prepare a 'ready to use' Nanoserver VHD for the SwarmMSKit : mount/unmount/djoin with dism tool for injecting the latest KB/Hotfixs, binaries (curl, docker, swarm, consul, vault, etc...), install the Windows features (containers, compute Hyper-V, IIS, etc...) 
+But I have already prepared a 'ready to use' Nanoserver VHD for the SwarmMSKit : mount/unmount/djoin with dism tool for injecting the latest KB/Hotfixs, binaries (curl, docker, swarm, consul, vault, etc...), install the Windows features (containers, compute Hyper-V, IIS, etc...). You have only to download this file.
 
-######This VHD reference is up to date, the below Powershell script has already been performed on it :
+######This prepared VHD reference is up to date, the below Powershell script has already been performed on it :
 	$ci = New-CimInstance -Namespace root/Microsoft/Windows/WindowsUpdate -ClassName MSFT_WUOperationsSession
 	Invoke-CimMethod -InputObject $ci -MethodName ApplyApplicableUpdates
 	Restart-Computer; exit
@@ -157,9 +157,17 @@ Windows Server 2016 Standard or Datacenter
 
 (tests and validate on Windows Server 2016 and Windows 10 Professional, any feedback are welcome !)
 
-Downlaod the folder SwarmMSKit which contain all the necessary binaries (latest KB/Hotfix, consul, vault, docker engine, nexus oss, swarm, nanoserver OSImage, etc ...) :
+Powershell Version v3 or higher
+
+Clone this 
+
+Download the NanoServerDataCenter.vhd file from this Google Drive address :
 
 https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
+
+And that's it !
+
+
 
 
 SwarmMSKit - Beginning
