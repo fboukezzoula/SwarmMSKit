@@ -4,9 +4,10 @@ Author="Fouzi BOUKEZZOULA"
 CompanyName="Fouzi BOUKEZZOULA"
 Copyright="© FB 2017"
 RootModule = "SwarmMSKit.psm1"
-ModuleVersion="1.0.0.0"
+ModuleVersion="1.0.0.1"
 PowerShellVersion="3.0"
 ClrVersion="4.0"
-FunctionsToExport="Pause","NewNanoServerImage-Domain","NanoSetup","CopyToolsToImage","Create-Set-VM-Hyper-V","Enabled-Start-VM-Hyper-V","Wait-WinRM-Reachable","DockerInstallation","VaultServer","ConsulServer","ConsulAgent","SwarmWorker","SwarmManager","SwarmMSKit-Private-Registry"
+FunctionsToExport="PurgeTempMountFolder","Pause","Create-Set-VM-Hyper-V","Enabled-VM-Hyper-V","Wait-WinRM-Reachable","DockerInstallation","VaultServer-PrivateRegistry-UCP","ConsulServer","ConsulAgent","SwarmWorker","SwarmManager","NanoSetup","Set-VMNetworkConfiguration"
+HelpInfoUri="https://github.com/fboukezzoula/SwarmMSKit"
 }
 
