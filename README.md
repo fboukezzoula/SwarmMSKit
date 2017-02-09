@@ -161,7 +161,7 @@ Windows Server 2016 Standard or Datacenter
 
 Powershell Version v3 or higher
 
-Clone this SwarmMSKit (unzip it on a folder called for example "SwarMSKit") :
+Clone this SwarmMSKit (unzip it on a folder called for example "SwarmMSKit") :
 https://github.com/fboukezzoula/SwarmMSKit/archive/master.zip
 
 Then download the NanoServerDataCenter.vhd file from this Google Drive address :
