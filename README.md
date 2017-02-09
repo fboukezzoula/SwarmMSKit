@@ -236,6 +236,15 @@ When it's finish ...
 	docker login -u admin -p admin123 @YourFirstIP:8123
 	docker push nanoserver
 
+######Browse your Private Registery (Host on Nexus OSS) :
+	http://10.1.0.24:8081
+	login: admin
+	password: you have to define your password the first time you connect
+	
+######Browse the Mangement UI Web Administration :
+	http://10.1.0.24:9000
+	login: admin
+	password : admin123
 
 SwarmMSKit-Youtube channel
 -----
