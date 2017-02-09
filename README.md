@@ -203,7 +203,7 @@ SwarmMSKit - Beginning
 
 ######Set firewall rules for all our Cluster : Docker daemon, swarm, consul, veualt, registry, file sharing, winrm, etc ...
 ######if $True  = set each FW rule (more than 16 rules .... secured ;o) !)
-######if $False = we disable the Microsoft Firewall so all the ports ar open inbound/outbound ... not secured !
+######if $False = we disable the Microsoft Firewall so all the ports are open inbound/outbound ... not secured !
 	$Firewall = $True
 
 ######Our dedicated TCP Port for our Cluster Swarm Service :
@@ -239,12 +239,12 @@ When it's finish ...
 ######Browse your Private Registery (Host on Nexus OSS) :
 	http://10.1.0.24:8081
 	login: admin
-	password: you have to define your password the first time you connect
+	password: admin123	
 	
 ######Browse the Mangement UI Web Administration :
 	http://10.1.0.24:9000
 	login: admin
-	password : admin123
+	password : you have to define your password the first time you connect
 
 A wonderfull open source Swarm Management UI : http://portainer.io/
 
