@@ -39,7 +39,7 @@ Restart-Service winrm
 $global:WorkDir                               = "C:\SwarmMSKit"
 $global:VMPath                                = "$global:WorkDir\VHD_Files"
 $global:Model_NanoServerDataCenter            = "$global:WorkDir\VHD_Reference\NanoServerDataCenter.vhd"
-$global:ToolsSource                           = "$global:WorkDir\ToolsSource"
+
 $global:LogDismTimestamp                      = (Get-Date -Format u).Replace("-","_").Replace(" ","_").Replace(":","").Replace("Z","")
 
 <#
