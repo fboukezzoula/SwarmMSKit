@@ -246,6 +246,8 @@ When it's finish ...
 	login: admin
 	password : admin123
 
+A wonderfull open source Swarm Management UI : http://portainer.io/
+
 SwarmMSKit-Youtube channel
 -----
 
