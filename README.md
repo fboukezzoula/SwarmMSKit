@@ -178,8 +178,7 @@ SwarmMSKit - Beginning
 	$global:WorkDir                               = "C:\SwarmMSKit"
 	$global:VMPath                                = "$global:WorkDir\VHD_Files"
 	$global:Model_NanoServerDataCenter            = "$global:WorkDir\VHD_Reference\NanoServerDataCenter.vhd"
-	$global:ToolsSource                           = "$global:WorkDir\ToolsSource"	
-
+	
 ######IP Configuration of your first VM NanoServer and your VM Switch Hyper-V configuration :
 	IPAddress      = "10.1.0.24"
 	GatewayAddress = "10.1.0.1"
