@@ -33,7 +33,7 @@ All the VMs NanoServer will be up to date (latest KBs/Hotfixs) and will hosted t
 
 You can disable the Microsoft Firewall or use the Firewall : the SwarmMSKit will create for you all the firewall rules (more than 16 rules) for enabled the access to the Docker Daemon, Swarm, Consul, Vault, Private Registry, Management UI, WinRM, File Sharing, etc ....
 
-We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the swarm.exe file with the official Docker Swarm GitHub source), Vault (0.6.4), Consul (0.7.2) and Nexus OSS (3.2.0-01) versions.
+We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the swarm.exe file with the official Docker Swarm GitHub source), Vault (0.6.4), Consul (0.7.2) and Nexus OSS (3.2.0-01) versions. We use the latest OSImage docker Microsoft/NanoServer (Image ID : d9bccb9d4cac).
 
 Notice that I've built locally the swarm.exe binary with the latest version of this docker/swarm source codes :
 https://github.com/docker/swarm/releases/tag/v1.2.6
