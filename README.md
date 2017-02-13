@@ -250,9 +250,7 @@ A wonderfull open source Swarm Management UI : http://portainer.io/
 SwarmMSKit-Youtube channel
 -----
 
-Stay tunned, very soon ...
-
-Meanwhile, have a look on the screenshots (folder pics)
+https://youtu.be/HknSzK_djwo
 
 
 
