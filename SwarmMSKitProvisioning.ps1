@@ -406,7 +406,6 @@ Invoke-Command -ScriptBlock {param($command) cmd /c $command} -args $PSCommand -
 " "
 Write-Host "End at : $(Get-Date -format t)"
 $End = (Get-Date).Minute
-
 " "
 " "
 " "
