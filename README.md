@@ -173,7 +173,7 @@ Clone this SwarmMSKit (unzip it on a folder called for example "SwarmMSKit") :
 https://github.com/fboukezzoula/SwarmMSKit/archive/master.zip
 
 Then download the NanoServerDataCenter.vhd file from this Google Drive address :
-https://drive.google.com/drive/folders/0BzqZR1dT_FQgRlcxRG9PSEVmUVk?usp=sharing
+https://drive.google.com/open?id=0BzqZR1dT_FQgRFJFZk1xcDZKOEk
 
 in a folder (parameter: $global:Model_NanoServerDataCenter)
 
