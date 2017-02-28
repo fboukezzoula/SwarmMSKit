@@ -13,9 +13,9 @@ Function global:Pause  {
  
         param([int]$Seconds,[String]$ContainerHostNameNodeCreate)
 
-        Write-Host " "
-        Write-Host "Wait while NanoServer VM $ContainerHostNameNodeCreate is performing post-installation tasks and for booting ..."
-        Write-Host " "
+        " "
+        "Wait while NanoServer VM $ContainerHostNameNodeCreate is performing post-installation tasks and for booting ..."
+        " "
         Start-Sleep -Seconds $Seconds
 }
 
@@ -81,19 +81,51 @@ Function global:Wait-WinRM-Reachable {
 # function to install and configure the Docker Daemon on each new NanoServer VM : we don't forget to use set in the daemon.json configuration file the @IP of our consul registry discovery service, private registry, etc ... 
 Function global:DockerInstallation {
 
-    param([bool]$SwarmManager,[String]$IPConsulMaster) 
-
+    param([bool]$SwarmManager,[bool]$EnabledDockerDaemonTLS,[String]$IPConsulMaster,[String]$ContainerIPNodeCreate,[String]$Username,[String]$clearadminPassword) 
+ 
     setx path "%PATH%;$env:ProgramFiles\docker\"
     
     # To prevent an error is thrown indicating a timeout event, the following PowerShell command  fix it
     Set-ItemProperty -Path 'HKLM:SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers' -Name VSmbDisableOplocks -Type DWord -Value 0 -Force
 
     Stop-Service Docker 
-
-    $advertise = $IPConsulMaster + ":2375"
+    
     $consul    = $IPConsulMaster + ":8500"
 
     $daemon_json_file = "c:\ProgramData\docker\config\daemon.json"
+
+if ($EnabledDockerDaemonTLS -eq "$True") {
+
+    $advertise = $IPConsulMaster + ":2376"
+
+    $json = @"
+{
+    "tlscacert":  "C:\\ProgramData\\docker\\certs.d\\ca.pem",
+    "tlsverify":  true,
+    "hosts":  [
+                  "tcp://0.0.0.0:2376",
+                  "npipe://"
+              ],
+    "tlscert":  "C:\\ProgramData\\docker\\certs.d\\cert.pem",
+    "tlskey":  "C:\\ProgramData\\docker\\certs.d\\key.pem",
+    "insecure-registries": ["$IPConsulMaster`:8123"]
+}
+"@
+    $Source = "\\$IPConsulMaster\c$\ProgramData\OpenSSL\TLS"
+    $Dest   = "C:\ProgramData\docker\certs.d"
+
+    New-Item -Type Directory -Path $Dest -Force | Out-Null
+
+    $MapDrive ="net use S: $Source /user:$Username $clearadminPassword"
+    Invoke-Expression $MapDrive
+
+    Copy-Item -Path S:\ca.pem -Destination $Dest\ca.pem
+    Copy-Item -Path S:\$ContainerIPNodeCreate-cert.pem -Destination $Dest\cert.pem 
+    Copy-Item -Path S:\$ContainerIPNodeCreate-priv-key.pem -Destination $Dest\key.pem 
+
+} else {
+
+    $advertise = $IPConsulMaster + ":2375"
 
     $json = @"
 {
@@ -102,6 +134,7 @@ Function global:DockerInstallation {
 }
 "@
 
+}
     $jobj = ConvertFrom-Json -InputObject $json
 
     if ($SwarmManager -eq "$True") {
@@ -141,7 +174,7 @@ Function global:DockerInstallation {
 
 Function global:VaultServer-PrivateRegistry-UCP {
 
-    param([String]$IPVaultServer,[int]$SwarmClusterPort) 
+    param([String]$IPVaultServer,[int]$SwarmClusterPort,[bool]$EnabledDockerDaemonTLS) 
 
     $DestinationFolder_hcl_configuration_file = "c:\vault\vault-fboukezzoula.hcl"
     $DestinationFolder_vault_keys_file = "c:\vault\vaul_init.txt"
@@ -174,7 +207,7 @@ listener "tcp" {
     (Get-Content -path "$DestinationFolder_hcl_configuration_file" -Encoding Unicode) | Set-Content -Encoding "Default" -Path "$DestinationFolder_hcl_configuration_file"
 
     " "
-    Write-Host "Installation and configuration of the VAULT Server ... Please wait ..."
+    "Installation and configuration of the VAULT Server ... Please wait ..."
     " "
 
     # we install the Vault Server as an Windows Service with nssm
@@ -199,7 +232,7 @@ listener "tcp" {
     foreach ($key in $AllUnsKeyseal[3,7,11,15,19]) {
         
         " "
-        Write-Host "vault unseal $key"
+        "vault unseal $key"
         $CommandInitVault = "vault unseal -address=http://" + $IPVaultServer + ":8200 $key"
         Invoke-Expression $CommandInitVault
         " "
@@ -227,7 +260,7 @@ listener "tcp" {
     $StartServiceSwarmMSKitPrivateRegistry = "c:\PrivateRegistry\nexus-3.2.0-01\bin\nexus.exe /start SwarmMSKit-PrivateRegistry"
     
     " "
-    Write-Host "Install the SwarmMSKit-Private-Registry service to store our Docker images ..."
+    "Install the SwarmMSKit-Private-Registry service to store our Docker images ..."
     " "
      
     Invoke-Expression $InstallServiceSwarmMSKitPrivateRegistry | Out-Host | Out-Null
@@ -238,19 +271,30 @@ listener "tcp" {
     $PortainerArchive = "c:\tools\portainer.zip"
 
     " "
-    Write-Host "Installation and configuration of the Web Admin Cluster Swarm - Portainer (Like UCP of Docke Inc)  ... Please wait ..."
+    "Installation and configuration of the Web Admin Cluster Swarm - Portainer (Like UCP of Docke Inc)  ... Please wait ..."
     " "  
 
     Expand-Archive -Path $PortainerArchive -DestinationPath c:\portainer -Force | Out-Null    
     
     $DestinationFolder_SwarmMSKit_UCP = "c:\portainer\portainer.cmd"
 
-    $SWARM_HOST = "tcp://" + $IPVaultServer + ":$SwarmClusterPort"       
+    $SWARM_HOST = "tcp://" + $IPVaultServer + ":$SwarmClusterPort"   
+    
+    $TLSverify = "--tlsverify --tlscacert=C:\\ProgramData\\docker\\certs.d\\ca.pem --tlscert=C:\\ProgramData\\docker\\certs.d\\cert.pem --tlskey=C:\\ProgramData\\docker\\certs.d\\key.pem"    
 
     # create the cmd file that will be run at the end - this bach launch the Portainer which is a simple but very cool management solution for Docker. 
     $CommandLaunchSwarmMSKit_UCP ="set portainerdir=""c:\portainer""" ; Add-Content $DestinationFolder_SwarmMSKit_UCP $CommandLaunchSwarmMSKit_UCP
     $CommandLaunchSwarmMSKit_UCP ="cd /d %portainerdir%" ; Add-Content $DestinationFolder_SwarmMSKit_UCP $CommandLaunchSwarmMSKit_UCP
+    
+    if ($EnabledDockerDaemonTLS -eq "$True") {
+    
+    $CommandLaunchSwarmMSKit_UCP =".\portainer.exe -H $SWARM_HOST --logo ""http://$IPVaultServer/logoSwarmMSKit.png"" --templates http://$IPVaultServer/templates.json $TLSverify" ; Add-Content $DestinationFolder_SwarmMSKit_UCP $CommandLaunchSwarmMSKit_UCP
+
+    } else {
+
     $CommandLaunchSwarmMSKit_UCP =".\portainer.exe -H $SWARM_HOST --logo ""http://$IPVaultServer/logoSwarmMSKit.png"" --templates http://$IPVaultServer/templates.json" ; Add-Content $DestinationFolder_SwarmMSKit_UCP $CommandLaunchSwarmMSKit_UCP
+    
+    }
 
     $ExecutePortainer = "c:\portainer\portainer.cmd"   
     
@@ -281,6 +325,11 @@ $DockerHostedRepository = @"
 
     (Get-Content -path "$DestinationFolder_DockerHostedRepository" -Encoding Unicode) | Set-Content -Encoding "Default" -Path "$DestinationFolder_DockerHostedRepository"
 
+    " "
+    "Create a DockerHost Repository called 'swarmmskit' for our Docker images in the deployed ..."
+    "Please wait while the Private Registry is running and wait for the Docker Hosted Repository has been created ...."
+    " "
+
     $CreateDockerHostRepository      = "curl -s -u admin:admin123 --header ""Content-Type: application/json"" ""http://$IPVaultServer"+":8081/service/siesta/rest/v1/script/"" -d @$DestinationFolder_DockerHostedRepository"
     $RunGroovyDockerHostRepository   = "curl -s -X POST -u admin:admin123 --header ""Content-Type: text/plain"" ""http://$IPVaultServer"+":8081/service/siesta/rest/v1/script/swarmmskit/run""" 
 
@@ -290,7 +339,7 @@ $DockerHostedRepository = @"
     $RunGroovyDockerHostRepository
     " "
     
-    "Please wait while the Private Registry is running and wait for the Docker Hosted Repository has been created ...."
+    
     Start-Sleep -Seconds 75
     
     Do
@@ -356,9 +405,19 @@ Function global:ConsulAgent {
 # function to install and configure the Swarm Node/Worker
 Function global:SwarmWorker {
 
-    param ([String]$IPVM,[String]$IPConsulMaster) 
+    param ([String]$IPVM,[bool]$EnabledDockerDaemonTLS,[String]$IPConsulMaster) 
 
-    $advertise = "--advertise=" + $IPVM + ":2375"
+    if ($EnabledDockerDaemonTLS -eq "$True") {
+
+        $advertise = "--advertise=" + $IPVM + ":2376"
+
+    } else {
+
+        $advertise = "--advertise=" + $IPVM + ":2375"
+
+    }
+
+
     $consul    = $IPConsulMaster + ":8500"
    
     # we install the Swarm Node/Worker as an Windows Service with nssm
@@ -374,13 +433,23 @@ Function global:SwarmWorker {
 # function to install and configure the Swarm Manager
 Function global:SwarmManager {
 
-    param ([String]$IPVM,[String]$IPConsulMaster, [int]$SwarmClusterPort) 
+    param ([String]$IPVM,[bool]$EnabledDockerDaemonTLS,[String]$IPConsulMaster, [int]$SwarmClusterPort) 
 
     $SwarmManagerDaemon = $IPVM + ":$SwarmClusterPort"
     $consul    = $IPConsulMaster + ":8500"
 
+if ($EnabledDockerDaemonTLS -eq "$True") {
+
+    $TLSverify = "--tlsverify --tlscacert=C:\\ProgramData\\docker\\certs.d\\ca.pem --tlscert=C:\\ProgramData\\docker\\certs.d\\cert.pem --tlskey=C:\\ProgramData\\docker\\certs.d\\key.pem"
+
+    nssm install SwarmMSKit-Manager swarm manage "$TLSverify -H tcp://$SwarmManagerDaemon consul://$consul" | Out-Null
+
+} else {
+
     # we install the Swarm Manager as an Windows Service with nssm   
     nssm install SwarmMSKit-Manager swarm manage "-H tcp://$SwarmManagerDaemon consul://$consul" | Out-Null
+
+}
     nssm set SwarmMSKit-Manager Description "Cluster Swarm under NanoServer - Swarm Manager" | Out-Null
     nssm set SwarmMSKit-Manager AppStdout c:\Logs\swarm\service.log | Out-Null
     nssm set SwarmMSKit-Manager AppStderr c:\Logs\swarm\service.log | Out-Null
@@ -545,12 +614,277 @@ Function Set-VMNetworkConfiguration {
         }
  
         if ($job.JobState -eq 7) {
-            write-host "Success update the TCP/IP configuration !"
+            "Success update the TCP/IP configuration !"
         }
         else {
             $job.GetError()
         }
     } elseif($setip.ReturnValue -eq 0) {
-        Write-Host "Success update the TCP/IP configuration !"
+            "Success update the TCP/IP configuration !"
     }
+}
+
+# function for setting the TCP/IP for the new VM NanoServer (static @IP)
+Function DockerSwarmMSKitWithTLSAuthentication {
+
+    param([String]$ServersInCluster,[String]$IPAddress,[String]$FirstVM,[String]$Subnet) 
+
+if ($IPAddress -eq $FirstVM) {
+
+" "
+"All the Docker Engine hosts (client, swarm manager(s) and swarm workers) have a copy of the CA’s certificate as well as their own key-pair signed by the CA."
+"TLS Authentication will be automatically set and configure between Docker, Swarm and Client :"
+" "
+"Create a Certificate Authority (CA) server, Create and sign keys for the Swarm Manager and Workers ... Please Wait ..."
+" "
+
+    $OpenSSLPath = "$global:VMPath\nanoserver-offine-temp\ProgramData\OpenSSL\bin"
+
+    New-Item -Type Directory -Path "$global:VMPath\nanoserver-offine-temp\ProgramData\OpenSSL\TLS" -Force | Out-Null
+
+    $KeyStoreTLS = "$global:VMPath\nanoserver-offine-temp\ProgramData\OpenSSL\TLS"
+
+
+$LastOctetAdress = $IPAddress.Split('.')
+$NextIP = [int]($LastOctetAdress[-1]) 
+
+$j=2
+$a =
+    for($i = $NextIP; $i -lt ($NextIP+$ServersInCluster); $i++){
+       "IP."+$j+" = $Subnet$i`r" 
+        $j++
+    } 
+
+$opensslcnf = @" 
+[ req ]
+default_bits = 4096
+default_keyfile = ca-priv-key.pem
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+default_md = sha1
+string_mask = nombstr
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+countryName = FR
+stateOrProvinceName = IdF
+localityName = PARIS
+organizationalUnitName = SwarmMSKit
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[ v3_ca ]
+subjectAltName = @alt_names
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
+basicConstraints = CA:true
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid:always
+
+[ alt_names ]
+# The IPs of the Docker and Swarm hosts
+ IP.1 = 127.0.0.1
+ $a
+"@
+
+    $opensslcnf | Out-File $KeyStoreTLS\openssl.cnf
+
+    (Get-Content -path "$KeyStoreTLS\openssl.cnf" -Encoding Unicode) | Set-Content -Encoding "Default" -Path "$KeyStoreTLS\openssl.cnf"
+
+    #New-Item -Type Directory -Path "$global:VMPath\nanoserver-offine-temp\certs.d" -Force | Out-Null
+    New-Item -Type Directory -Path "$global:VMPath\nanoserver-offine-temp\ProgramData\docker\certs.d" -Force | Out-Host | Out-Null      
+    
+    " " 
+    "$OpenSSLPath\openssl.exe -ArgumentList genrsa -out $KeyStoreTLS\ca-priv-key.pem 2048"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "genrsa -out $KeyStoreTLS\ca-priv-key.pem 2048" | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $KeyStoreTLS\ca-priv-key.pem
+    
+    
+    " "
+    "$OpenSSLPath\openssl.exe -ArgumentList req -config $KeyStoreTLS\openssl.cnf -new -key $KeyStoreTLS\ca-priv-key.pem -x509 -days 1825 -out $KeyStoreTLS\ca.pem"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "req -config $KeyStoreTLS\openssl.cnf -new -key $KeyStoreTLS\ca-priv-key.pem -x509 -days 1825 -out $KeyStoreTLS\ca.pem" | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $KeyStoreTLS\ca.pem
+    
+    
+    if (!(Test-Path -Path "$env:USERPROFILE\.SwarmMSKit")) {" ";"Create $env:USERPROFILE\.SwarmMSKit folder and copy the certificates for connecting to a TLS-enabled daemon with TLS ... Please Wait ...";" "; 
+        mkdir "$env:USERPROFILE\.SwarmMSKit" | Out-Host | Out-Null
+    } else {
+    
+        Remove-Item -Recurse $env:USERPROFILE\.SwarmMSKit\* -Force
+    
+    }
+    
+    " "
+    "$OpenSSLPath\openssl.exe -ArgumentList genrsa -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem 2048"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "genrsa -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem 2048"  | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem
+
+    " "
+    "$OpenSSLPath\openssl.exe -ArgumentList req -subj /CN=127.0.0.1 -new -key $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "req -subj ""/CN=127.0.0.1"" -new -key $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr"  | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr
+    
+    " "    
+    "$OpenSSLPath\openssl.exe -ArgumentList x509 -req -days 1825 -in $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr -CA $KeyStoreTLS\ca.pem -CAkey $KeyStoreTLS\ca-priv-key.pem -CAcreateserial -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1-cert.pem -extensions v3_req -extfile $KeyStoreTLS\openssl.cnf"  
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "x509 -req -days 1825 -in $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr -CA $KeyStoreTLS\ca.pem -CAkey $KeyStoreTLS\ca-priv-key.pem -CAcreateserial -out $env:USERPROFILE\.SwarmMSKit\127.0.0.1-cert.pem -extensions v3_req -extfile $KeyStoreTLS\openssl.cnf"  | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $env:USERPROFILE\.SwarmMSKit\127.0.0.1-cert.pem
+    " "
+
+    Copy-Item -Path $KeyStoreTLS\ca.pem -Destination $env:USERPROFILE\.SwarmMSKit\ca.pem | Out-Host | Out-Null
+    Rename-Item -Path $env:USERPROFILE\.SwarmMSKit\127.0.0.1-cert.pem -NewName $env:USERPROFILE\.SwarmMSKit\cert.pem | Out-Host | Out-Null
+    Rename-Item -Path $env:USERPROFILE\.SwarmMSKit\127.0.0.1-priv-key.pem -NewName $env:USERPROFILE\.SwarmMSKit\key.pem | Out-Host | Out-Null
+     
+    " "
+    "You have now a copy of the CA’s certificate as well as their own key-pair signed by the CA for executing Docker command on the Cluster Swarm with a TLS Authentication."
+    "All the certificates are save in this folder : $env:USERPROFILE\.SwarmMSKit"
+    " "
+          
+    $LastOctetAdress = $IPAddress.Split('.')
+    $NextIP = [int]($LastOctetAdress[-1]) 
+
+    for($i = $NextIP; $i -lt ($NextIP+$ServersInCluster); $i++){
+
+    " "
+    "$OpenSSLPath\openssl.exe -ArgumentList genrsa -out $KeyStoreTLS\$Subnet$i-priv-key.pem 2048"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "genrsa -out $KeyStoreTLS\$Subnet$i-priv-key.pem 2048" | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $KeyStoreTLS\$Subnet$i-priv-key.pem
+
+    " "
+    "$OpenSSLPath\openssl.exe -ArgumentList req -subj /CN=$Subnet$i -new -key $KeyStoreTLS\$Subnet$i-priv-key.pem -out $KeyStoreTLS\$Subnet$i.csr"
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "req -subj ""/CN=$Subnet$i"" -new -key $KeyStoreTLS\$Subnet$i-priv-key.pem -out $KeyStoreTLS\$Subnet$i.csr"  | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $KeyStoreTLS\$Subnet$i.csr
+    
+    " "    
+    "$OpenSSLPath\openssl.exe -ArgumentList x509 -req -days 1825 -in $KeyStoreTLS\$Subnet$i.csr -CA $KeyStoreTLS\ca.pem -CAkey $KeyStoreTLS\ca-priv-key.pem -CAcreateserial -out $KeyStoreTLS\$Subnet$i-cert.pem -extensions v3_req -extfile $KeyStoreTLS\openssl.cnf"  
+    Start-Process -FilePath "$OpenSSLPath\openssl.exe" -ArgumentList "x509 -req -days 1825 -in $KeyStoreTLS\$Subnet$i.csr -CA $KeyStoreTLS\ca.pem -CAkey $KeyStoreTLS\ca-priv-key.pem -CAcreateserial -out $KeyStoreTLS\$Subnet$i-cert.pem -extensions v3_req -extfile $KeyStoreTLS\openssl.cnf" | Out-Host | Out-Null
+    Start-Sleep -Seconds 5
+    " "
+    gc $KeyStoreTLS\$Subnet$i-cert.pem
+    " "
+
+    if ((Test-Path -Path $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr)) {    
+        Remove-Item -Path $env:USERPROFILE\.SwarmMSKit\127.0.0.1.csr -Force | Out-Null         
+    } 
+    
+    ""
+    "The Docker Engine host which have this [@IP:$Subnet$i] will have a copy of the CA’s certificate as well as their own key-pair signed by the CA."
+    " "
+
+    } 
+} else {
+    
+    " "  
+    "The Certifactes Generated for this [$IPAddress] NanoServer have been already generated/performed !"
+    "Copying them and configuring them for the Daemon Docker Engine ... Please Wait ..."
+    " "
+}
+    
+
+}
+
+Function SwarMSKit-Check {
+
+    param([String]$IPAddress,[String]$SwarmClusterPort,[bool]$EnabledDockerDaemonTLS,[String]$Username,[String]$clearadminPassword) 
+
+$TLSCertificatesPath = "$env:USERPROFILE\.SwarmMSKit"
+
+if ($EnabledDockerDaemonTLS -eq "$True") {
+    $TLSverify = "--tlsverify --tlscacert=$TLSCertificatesPath\ca.pem --tlscert=$TLSCertificatesPath\cert.pem --tlskey=$TLSCertificatesPath\key.pem" 
+    } else {
+    $TLSverify =""
+}
+
+    $Source = "\\$IPAddress\c$\Windows\System32"
+    $Dest   = "$TLSCertificatesPath"
+    
+    if (!(Get-PSDrive S)) {
+    
+        $MapDrive ="net use S: $Source /user:$Username $clearadminPassword"
+        Invoke-Expression $MapDrive | Out-Host | Out-Null     
+    }
+    else { 
+    
+        
+        $MapDriveDelete ="net use S: /delete"
+        Invoke-Expression $MapDriveDelete | Out-Host | Out-Null
+        $MapDrive ="net use S: $Source /user:$Username $clearadminPassword"
+        Invoke-Expression $MapDrive | Out-Host | Out-Null 
+    
+    }
+        
+    Copy-Item -Path S:\vault.exe -Destination $Dest\vault.exe
+    Copy-Item -Path S:\consul.exe -Destination $Dest\consul.exe 
+
+
+$batchTestPostSwarMSKitInstallation = "@
+@echo off
+echo.
+echo @@@@@     SwarmMSKit has been deployed ! Let's verify it :) !     @@@@@
+echo.
+pause
+echo.
+echo.
+echo *****     CONSUL SERVER STATUS :
+echo.
+$TLSCertificatesPath\consul members -rpc-addr=$IPAddress`:8400
+echo.
+pause
+echo.
+echo *****     VAULT SERVER STATUS :
+echo.
+$TLSCertificatesPath\vault status
+echo.
+pause
+echo.
+echo *****     SWARM CLUSTER STATUS :
+echo.
+docker -H tcp://$IPAddress`:$SwarmClusterPort $TLSverify info 
+echo.
+pause
+echo.
+echo *****     RUN A CONTAINER IN THE CLUSTER SWARM (nanoserver cmd)  :
+echo.
+echo command will be launch is :   docker -H tcp://$IPAddress`:$SwarmClusterPort $TLSverify run -it nanoserver cmd
+echo.
+pause
+docker -H tcp://$IPAddress`:$SwarmClusterPort $TLSverify run -it nanoserver cmd
+echo.
+echo.
+echo.
+echo. Thank you for using SwarmMSKit and stay tuned for the next update/add ...
+echo.
+echo.
+pause
+echo.
+@"
+
+    $batchTestPostSwarMSKitInstallation| Out-File $env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd
+
+    (Get-Content -path "$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd" -Encoding Unicode) | Set-Content -Encoding "Default" -Path "$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd"
+
+    Start-Process -FilePath http://$IPAddress`:9000
+    Start-Process -FilePath http://$IPAddress`:8081
+    
+    Start-Process -FilePath "$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd"
+
 }
