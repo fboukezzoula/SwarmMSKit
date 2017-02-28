@@ -878,7 +878,7 @@ pause
 echo.
 @"
 
-    $batchTestPostSwarMSKitInstallation| Out-File $env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd
+    $batchTestPostSwarMSKitInstallation | Out-File $env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd
 
     (Get-Content -path "$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd" -Encoding Unicode) | Set-Content -Encoding "Default" -Path "$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd"
 
