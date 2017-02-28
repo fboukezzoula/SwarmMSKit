@@ -57,7 +57,7 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 	 OS/Arch:      windows/amd64
 	 Experimental: false
  
-
+######(below examples without the TLS Enabled : EnabledDockerDaemonTLS = $False)
 ######docker -H tcp://10.1.0.24:2017 info
 	Containers: 0
 	 Running: 0
