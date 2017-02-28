@@ -33,6 +33,13 @@ All the VMs NanoServer will be up to date (latest KBs/Hotfixs) and will hosted t
 
 You can disable the Microsoft Firewall or use the Firewall : the SwarmMSKit will create for you all the firewall rules (more than 16 rules) for enabled the access to the Docker Daemon, Swarm, Consul, Vault, Private Registry, Management UI, WinRM, File Sharing, etc ....
 
+By default (variable : $global:EnabledDockerDaemonTLS = $True) the SwarmMSKit tool will automatically configure your Docker Swarm for TLS, all the Docker Engine hosts (client, swarm manager(s) and swarm workers) have a copy of the CA’s certificate as well as their own key-pair signed by the CA.
+In this case, all the client certificates are automatically generated in this folder :
+######$env:USERPROFILE\.SwarmMSKit
+
+Finally, the UI Swarm Administration Web (Portainer) and the UI Nexus OSS (Private Registry) are automatically open in your default web browser and we generated in your desktop a file called SwarmMSKIT-Check.cmd for testing the installation and configuration of all the tools (consul, vault, docker swarm and running a container to the swarm !)
+######$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd
+
 We use the latest supported Docker Daemon Engine, launched this last 18 January 2017 (1.13), Swarm (1.2.6 : build the swarm.exe file with the official Docker Swarm GitHub source), Vault (0.6.4), Consul (0.7.2) and Nexus OSS (3.2.0-01) versions. We use the latest OSImage docker Microsoft/NanoServer (Image ID : d9bccb9d4cac).
 
 Notice that I've built locally the swarm.exe binary with the latest version of this docker/swarm source codes :
