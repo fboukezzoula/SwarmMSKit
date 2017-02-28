@@ -1,7 +1,7 @@
 Set-StrictMode -version 3
 $ErrorActionPreference = "Stop"
 
-<# SwarmMSKit v1.0.0.2
+<# SwarmMSKit v1.0.0.3
 
 Author : Fouzi BOUKEZZOULA
 
@@ -9,7 +9,7 @@ Twitter, Facebook : @fboukezzoula
 
 https://github.com/fboukezzoula/SwarmMSKit
 
-@January 2017
+@March 2017
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ $global:DNSAddresses            = "10.1.0.1"
 $global:Subnet                  = "10.1.0."
 $global:VMSwitch                = "InternalNetwork"
 
-# System Configuration for our NanoServer VM, 2 vCPU and 2 Go Ram
+# System Configuration for our NanoServer VM, 4 vCPU and 2 Go Ram
 $global:VMProcessor             = 4
 $global:VMRam                   = 2048MB
 
@@ -79,6 +79,9 @@ $global:SwarmClusterPort = "2017"
 # if $True  = set each FW rule
 # if $False = we disable the Microsoft Firewall so all the ports ar open inbound/outbound
 $Firewall = $True
+
+# Enabled Docker Daemon TLS ? Default $True, of course ....
+$global:EnabledDockerDaemonTLS = $True
 
 $LastOctetAdress = $IPAddress.Split('.')
 $NextIP = [int]($LastOctetAdress[-1]) 
@@ -127,7 +130,7 @@ $myCluster
 Function global:ClusterNodeCreation {
 
     param([bool]$IsSwarmManager,[String]$ContainerHostNameNodeCreate, [String]$ContainerIPNodeCreate, [String]$BootstrapExpectServers)
-    
+            
     $global:ContainerIPAdress[0]="$ContainerIPNodeCreate"   
        
     $ClusterMembers.Add("$ContainerIPNodeCreate") | Out-Null
@@ -150,10 +153,7 @@ Function global:ClusterNodeCreation {
     $MountImage
     " "
     Invoke-Expression $MountImage | Out-Host | Out-Null 
-        
-    New-Item -Type Directory -Path "$global:VMPath\nanoserver-offine-temp\Windows\Setup\Scripts" -Force | Out-Null 
 
-#region AuthenticationType
     if ($AuthenticationType -eq "Local") {
 
             "Using a Local account  ... Injection this credential to the target NanoServer Name : $ContainerHostNameNodeCreate.vhd ... Please Wait ... "
@@ -207,7 +207,7 @@ $unattend = @"
 
         Invoke-Expression $Command_Inject_unattend 
 
-        copy $WorkDir\unattend.xml $global:VMPath\nanoserver-offine-temp\Windows\panther
+        Copy-Item $WorkDir\unattend.xml $global:VMPath\nanoserver-offine-temp\Windows\panther
            
         
         } else {
@@ -217,7 +217,7 @@ $unattend = @"
 
             # AD Credential which will be the admin NanoServer account
             $global:Username              = "FBOUKEZZOULA\Administrateur"
-            $global:clearadminPassword    = "YourPassAD"
+            $global:clearadminPassword    = "change with your login and P@swwaord AD"
             $global:DomainName            = "FBOUKEZZOULA"
             $global:adminPassword  = ConvertTo-SecureString $clearadminPassword -AsPlainText -Force
 
@@ -240,6 +240,13 @@ $unattend = @"
     } 
 
 
+
+    if ($EnabledDockerDaemonTLS -eq "$True") {
+    
+        DockerSwarmMSKitWithTLSAuthentication $global:ServersInCluster $ContainerIPNodeCreate $ClusterMembers[0] $global:Subnet  
+         
+    }
+   
     " "
     $CommitImage="Dism /Commit-Image /MountDir:$global:VMPath\nanoserver-offine-temp /LogLevel:3 /LogPath:$global:VMPath\Logs\$global:LogDismTimestamp\dism.log /Quiet"
     $CommitImage
@@ -250,7 +257,7 @@ $unattend = @"
     $UnmountImage
     " "
     Invoke-Expression $UnmountImage | Out-Host | Out-Null 
-       
+            
 
     "Create, Set vCPU and RAM, Enabled the VM according your configuration and start the VM Name $ContainerHostNameNodeCreate in the Hyper-V ... Please Wait ..."
     " "  
@@ -271,26 +278,28 @@ $unattend = @"
        
     Pause 30 $ContainerHostNameNodeCreate | Out-Host | Out-Null
 
-    Wait-WinRM-Reachable $ContainerIPNodeCreate
+    Wait-WinRM-Reachable $ContainerIPNodeCreate 
+
            
      if ($IsSwarmManager -eq "$True") {
    
-        # If Swarm Manager/Consul Server Node 
-        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:DockerInstallation} -ArgumentList $True, $ClusterMembers[0]  | Out-Host | Out-Null        
+        # If Swarm Manager/Consul Server Node
+        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:DockerInstallation} -ArgumentList $True, $global:EnabledDockerDaemonTLS, $ClusterMembers[0], $ContainerIPNodeCreate, $global:Username, $global:clearadminPassword | Out-Host | Out-Null 
         Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:ConsulServer} -ArgumentList $ContainerIPNodeCreate, $ClusterMembers[0], $BootstrapExpectServers | Out-Host | Out-Null
-        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:SwarmManager} -ArgumentList $ContainerIPNodeCreate, $ClusterMembers[0], $global:SwarmClusterPort | Out-Host | Out-Null
+        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:SwarmManager} -ArgumentList $ContainerIPNodeCreate, $global:EnabledDockerDaemonTLS, $ClusterMembers[0], $global:SwarmClusterPort | Out-Host | Out-Null
        
      } 
     
      else {
 
         # If Swarm Node/Consul Agent Node :
-        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:DockerInstallation} -ArgumentList $False, $ClusterMembers[0] | Out-Host | Out-Null
+        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:DockerInstallation} -ArgumentList $False, $global:EnabledDockerDaemonTLS, $ClusterMembers[0],$ContainerIPNodeCreate, $global:Username, $global:clearadminPassword | Out-Host | Out-Null
         Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:ConsulAgent} -ArgumentList $ContainerIPNodeCreate, $ClusterMembers[0] | Out-Host | Out-Null
-        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:SwarmWorker} -ArgumentList $ContainerIPNodeCreate, $ClusterMembers[0], $global:SwarmClusterPort | Out-Host | Out-Null
+        Invoke-Command -ComputerName $ContainerIPNodeCreate -Credential $global:Cred -ScriptBlock ${function:SwarmWorker} -ArgumentList $ContainerIPNodeCreate, $global:EnabledDockerDaemonTLS, $ClusterMembers[0], $global:SwarmClusterPort | Out-Host | Out-Null
         
     }      
-    
+      
+       
 }
 #endregion
 
@@ -361,7 +370,7 @@ Function global:CreateServerNode {
 
 
 ## MAIN PROGRAMM
-clear;
+Clear-Host;
 
 Write-Host "Start at : $(Get-Date -format t)"  
 $Start = (Get-Date).Minute
@@ -396,16 +405,19 @@ ServersConfigurationCluster $NbrSwarmManager $NbrConsulServer $NbrSwarmNode $Nbr
 
 CreateServerNode $ServersInCluster $ContainerHostName $NextIP $NbrSwarmManager $NbrSwarmNode | Out-Host | Out-Null 
 
-Invoke-Command -ComputerName $ClusterMembers[0] -Credential $global:Cred -ScriptBlock ${function:VaultServer-PrivateRegistry-UCP} -ArgumentList $ClusterMembers[0], $global:SwarmClusterPort | Out-Host | Out-Null
+Invoke-Command -ComputerName $ClusterMembers[0] -Credential $global:Cred -ScriptBlock ${function:VaultServer-PrivateRegistry-UCP} -ArgumentList $ClusterMembers[0], $global:SwarmClusterPort, $global:EnabledDockerDaemonTLS | Out-Host | Out-Null
 
 # Finally, after building the portainer.cmd we launch the UCP IHM/GUI on the first member of the cluster which is a swarm manager, a consul server and a vault server
 $PSCommand = "c:\portainer\portainer.cmd"
 Invoke-Command -ScriptBlock {param($command) cmd /c $command} -args $PSCommand -ComputerName $ClusterMembers[0] -Credential $global:Cred -AsJob 
 
+SwarMSKit-Check $ClusterMembers[0] $global:SwarmClusterPort $global:EnabledDockerDaemonTLS $global:Username $global:clearadminPassword
+ 
 " "
 " "
 Write-Host "End at : $(Get-Date -format t)"
 $End = (Get-Date).Minute
+
 " "
 " "
 " "
