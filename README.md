@@ -205,6 +205,11 @@ SwarmMSKit - Beginning
 ######if $False = we disable the Microsoft Firewall so all the ports are open inbound/outbound ... not secured !
 	$Firewall = $True
 
+######Enabled Docker Daemon TLS ? Default $True, of course ....
+	$global:EnabledDockerDaemonTLS = $True
+
+All the Docker Engine hosts (client, swarm manager(s) and swarm workers) have a copy of the CA’s certificate as well as their own key-pair signed by the CA.
+
 ######Our dedicated TCP Port for our Cluster Swarm Service :
 	SwarmClusterPort = "2017"
 
