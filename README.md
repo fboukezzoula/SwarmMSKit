@@ -19,6 +19,7 @@ SwarmMSKit-Overview
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Private Registry + Management UI for your cluster ... all the VMs can be integrated in an Active Directory Domain or you can use a Local account. 
 
+SwarmMSKit can configure your Docker Swarm for TLS too. You have to choose only your hostname prefix and TCP/IP configuration for the Nanoserver VM.
 
 SwarmMSKit-Description
 -----
