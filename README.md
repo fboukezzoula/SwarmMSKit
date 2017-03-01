@@ -68,7 +68,7 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 	 Experimental: false
  
  
- ######docker -H tcp://10.1.0.24:2017 info
+######docker -H tcp://10.1.0.24:2017 info
 	Containers: 0
 	Running: 0
 	Paused: 0
