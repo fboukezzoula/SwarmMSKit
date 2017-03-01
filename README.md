@@ -267,8 +267,8 @@ Usage - SwarmMSKit with TLS Authentication
 The SwarmMSKit tool will automatically configure your Docker Swarm for TLS per default.
 The client certificates are automatically generated in this folder :
 
-* $env:USERPROFILE\.SwarmMSKit
-* %USERPROFILE%\.SwarmMSKit
+* $env:USERPROFILE\\.SwarmMSKit
+* %USERPROFILE%\\.SwarmMSKit
 
 Create a batch file (env.cmd) it with these environement variables like this :
 
@@ -281,8 +281,8 @@ In this example, the swarm manager have the @IP:10.1.0.24 and the swarm cluster 
 
 Then execute it	(cmd.exe) :
 
-* cd %USERPROFILE%\.SwarmMSKit
-* %USERPROFILE%\.SwarmMSKit\env.cmd
+* cd %USERPROFILE%\\.SwarmMSKit
+* %USERPROFILE%\\.SwarmMSKit\env.cmd
 
 ######You are now authenticate in the Cluster swarm and you can execute Docker commands :
 	docker info
