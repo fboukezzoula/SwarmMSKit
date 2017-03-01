@@ -834,6 +834,8 @@ if ($EnabledDockerDaemonTLS -eq "$True") {
         
     Copy-Item -Path S:\vault.exe -Destination $Dest\vault.exe
     Copy-Item -Path S:\consul.exe -Destination $Dest\consul.exe 
+    
+    Invoke-Expression $MapDriveDelete | Out-Host | Out-Null
 
 
 $batchTestPostSwarMSKitInstallation = "@
