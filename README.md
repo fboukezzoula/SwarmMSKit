@@ -10,7 +10,8 @@
     * [Setup requirements](#SwarmMSKit-Setup-requirements)
     * [Beginning with SwarmMSKit](#SwarmMSKit-Beginning)
 4. [Usage - SwarmMSKit](#SwarmMSKit-Usage)
-5. [Video Tutorial](#SwarmMSKit-Youtube channel)
+5. [Usage - SwarmMSKit with TLS Authentication](#SwarmMSKit-Usage)
+6. [Video Tutorial](#SwarmMSKit-Youtube channel)
 
 SwarmMSKit-Overview
 -----
@@ -46,6 +47,7 @@ We use the latest supported Docker Daemon Engine, launched this last 18 January 
 Notice that I've built locally the swarm.exe binary with the latest version of this docker/swarm source codes :
 https://github.com/docker/swarm/releases/tag/v1.2.6
 
+######(below examples without the TLS Enabled : EnabledDockerDaemonTLS = $False)
 
 ######docker -H tcp://10.1.0.24:2375 version :
 	Client:
@@ -65,8 +67,7 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 	 OS/Arch:      windows/amd64
 	 Experimental: false
  
-######(below examples without the TLS Enabled : EnabledDockerDaemonTLS = $False)
-######docker -H tcp://10.1.0.24:2017 info
+ ######docker -H tcp://10.1.0.24:2017 info
 	Containers: 0
 	 Running: 0
 	 Paused: 0
@@ -259,6 +260,33 @@ When it's finish ...
 	password : you have to define your password the first time you connect
 
 A wonderfull open source Swarm Management UI : http://portainer.io/
+
+Usage - SwarmMSKit with TLS Authentication
+-----
+
+The SwarmMSKit tool will automatically configure your Docker Swarm for TLS per default.
+The client certificates are automatically generated in this folder :
+######$env:USERPROFILE\.SwarmMSKit
+######%USERPROFILE%\.SwarmMSKit
+
+Create a batch file (env.cmd) it with these environement variables like this :
+
+	@echo off
+	set DOCKER_TLS_VERIFY=1
+	set DOCKER_CERT_PATH=%~dp0
+	set DOCKER_HOST=tcp://10.1.0.24:2017
+
+In this example, the swarm manager have the @IP:10.1.0.24 and the swarm cluster port ist 2017
+
+Then execute it	(cmd.exe) :
+cd %USERPROFILE%\.SwarmMSKit
+%USERPROFILE%\.SwarmMSKit\env.cmd
+
+######%You are now authenticate in the Cluster swarm and you can execute Docker commands :
+	docker info
+	docker run -it nanoserver powershell
+	docker run -it nanoserver cmd
+	
 
 SwarmMSKit-Youtube channel
 -----
