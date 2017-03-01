@@ -13,7 +13,7 @@
 5. [Usage - SwarmMSKit with TLS Authentication](#SwarmMSKit-Usage)
 6. [Video Tutorial](#SwarmMSKit-Youtube channel)
 
-SwarmMSKit-Overview
+SwarmMSKit - Overview
 -----
 
 10 minutes for deploying a full Cluster Swarm Microsoft NanoServer with all tools on Hyper-V !
@@ -22,7 +22,7 @@ Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V + Consul + Vault + Pr
 
 SwarmMSKit can configure your Docker Swarm for TLS too. You have to choose only your hostname prefix and TCP/IP configuration for the Nanoserver VM.
 
-SwarmMSKit-Description
+SwarmMSKit - Description
 -----
 
 Provisioning a Full MS NanoServer Cluster Swarm on Hyper-V with Consul Hashicorp software as Discovery Service, Vault Hashicorp software as a Secret Management Store and a Private Docker Registry host on Nexus OSS software.
@@ -158,7 +158,7 @@ But I have already prepared a 'ready to use' Nanoserver VHD for the SwarmMSKit :
 	docker pull microsoft/nanoserver
 	docker tag microsoft/nanoserver nanoserver
 
-SwarmMSKit-Setup requirements
+SwarmMSKit - Setup requirements
 -----
 
 Any Windows OS whit the feature Hyper-V Installed like :
@@ -223,7 +223,7 @@ All the Docker Engine hosts (client, swarm manager(s) and swarm workers) have a 
 	SwarmClusterPort = "2017"
 
 
-SwarmMSKit-Usage
+SwarmMSKit - Usage
 -----
 
 ######ExecutionPolicy
@@ -261,7 +261,7 @@ When it's finish ...
 
 A wonderfull open source Swarm Management UI : http://portainer.io/
 
-Usage - SwarmMSKit with TLS Authentication
+SwarmMSKit - Usage with TLS Authentication
 -----
 
 The SwarmMSKit tool will automatically configure your Docker Swarm for TLS per default.
@@ -290,7 +290,7 @@ Then execute it	(cmd.exe) :
 	docker run -it nanoserver cmd
 	
 
-SwarmMSKit-Youtube channel
+SwarmMSKit - Youtube channel
 -----
 
 https://youtu.be/HknSzK_djwo
