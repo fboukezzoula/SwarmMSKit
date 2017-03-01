@@ -67,6 +67,7 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
 	 OS/Arch:      windows/amd64
 	 Experimental: false
  
+ 
  ######docker -H tcp://10.1.0.24:2017 info
 	Containers: 0
 	Running: 0
@@ -267,7 +268,7 @@ The SwarmMSKit tool will automatically configure your Docker Swarm for TLS per d
 The client certificates are automatically generated in this folder :
 
 * $env:USERPROFILE\.SwarmMSKit
-* #%USERPROFILE%\.SwarmMSKit
+* %USERPROFILE%\.SwarmMSKit
 
 Create a batch file (env.cmd) it with these environement variables like this :
 
