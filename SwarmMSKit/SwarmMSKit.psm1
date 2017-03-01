@@ -817,7 +817,7 @@ if ($EnabledDockerDaemonTLS -eq "$True") {
     $Source = "\\$IPAddress\c$\Windows\System32"
     $Dest   = "$TLSCertificatesPath"
     
-    if (!(Get-PSDrive S)) {
+    if (!(Test-Path S:)) {
     
         $MapDrive ="net use S: $Source /user:$Username $clearadminPassword"
         Invoke-Expression $MapDrive | Out-Host | Out-Null     
