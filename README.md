@@ -69,40 +69,40 @@ https://github.com/docker/swarm/releases/tag/v1.2.6
  
  ######docker -H tcp://10.1.0.24:2017 info
 	Containers: 0
-	 Running: 0
-	 Paused: 0
-	 Stopped: 0
+	Running: 0
+	Paused: 0
+	Stopped: 0
 	Images: 2
 	Server Version: swarm/1.2.6
 	Role: primary
 	Strategy: spread
 	Filters: health, port, containerslots, dependency, affinity, constraint, whitelist
 	Nodes: 2
-	 Nano-Worker-01: 10.1.0.25:2375
-	  └ ID: 6WOI:CJAO:QPL2:D7ID:XD4M:RAQ3:O4AM:374O:GEC6:V2FW:YYUX:APNF
-	  └ Status: Healthy
-	  └ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
-	  └ Reserved CPUs: 0 / 4
-	  └ Reserved Memory: 0 B / 2.1 GiB
-	  └ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
-	  └ UpdatedAt: 2017-02-08T15:51:52Z
-	  └ ServerVersion: 1.13.0
-	 Nano-Worker-02: 10.1.0.26:2375
-	  └ ID: JVFE:5MS7:XRWC:OQA4:2QZJ:LUBA:GRIJ:AHRX:5SM7:YA25:LXGC:VLXK
-	  └ Status: Healthy
-	  └ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
-	  └ Reserved CPUs: 0 / 4
-	  └ Reserved Memory: 0 B / 2.1 GiB
-	  └ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
-	  └ UpdatedAt: 2017-02-08T15:51:44Z
-	  └ ServerVersion: 1.13.0
+	Nano-Worker-01: 10.1.0.25:2375
+	└ ID: 6WOI:CJAO:QPL2:D7ID:XD4M:RAQ3:O4AM:374O:GEC6:V2FW:YYUX:APNF
+	└ Status: Healthy
+	└ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
+	└ Reserved CPUs: 0 / 4
+	└ Reserved Memory: 0 B / 2.1 GiB
+	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	└ UpdatedAt: 2017-02-08T15:51:52Z
+	└ ServerVersion: 1.13.0
+	Nano-Worker-02: 10.1.0.26:2375
+	└ ID: JVFE:5MS7:XRWC:OQA4:2QZJ:LUBA:GRIJ:AHRX:5SM7:YA25:LXGC:VLXK
+	└ Status: Healthy
+	└ Containers: 0 (0 Running, 0 Paused, 0 Stopped)
+	└ Reserved CPUs: 0 / 4
+	└ Reserved Memory: 0 B / 2.1 GiB
+	└ Labels: kernelversion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), operatingsystem=Windows Server 2016 Datacenter, storagedriver=windowsfilter
+	└ UpdatedAt: 2017-02-08T15:51:44Z
+	└ ServerVersion: 1.13.0
 	Plugins:
-	 Volume:
-	 Network:
+	Volume:
+	Network:
 	Swarm:
-	 NodeID:
-	 Is Manager: false
-	 Node Address:
+	NodeID:
+	Is Manager: false
+	Node Address:
 	Kernel Version: 10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644)
 	Operating System: windows
 	Architecture: amd64
@@ -266,8 +266,8 @@ Usage - SwarmMSKit with TLS Authentication
 The SwarmMSKit tool will automatically configure your Docker Swarm for TLS per default.
 The client certificates are automatically generated in this folder :
 
-######$env:USERPROFILE\.SwarmMSKit
-######%USERPROFILE%\.SwarmMSKit
+* $env:USERPROFILE\.SwarmMSKit
+* #%USERPROFILE%\.SwarmMSKit
 
 Create a batch file (env.cmd) it with these environement variables like this :
 
