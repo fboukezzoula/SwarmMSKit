@@ -832,9 +832,10 @@ if ($EnabledDockerDaemonTLS -eq "$True") {
     
     }
         
-    Copy-Item -Path S:\vault.exe -Destination $Dest\vault.exe
-    Copy-Item -Path S:\consul.exe -Destination $Dest\consul.exe 
-    
+    Copy-Item -Path $Source\vault.exe -Destination $Dest\vault.exe
+    Copy-Item -Path $Source\consul.exe -Destination $Dest\consul.exe 
+
+    $MapDriveDelete ="net use S: /delete"
     Invoke-Expression $MapDriveDelete | Out-Host | Out-Null
 
 
