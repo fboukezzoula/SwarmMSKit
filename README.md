@@ -37,7 +37,7 @@ You can disable the Microsoft Firewall or use the Firewall : the SwarmMSKit will
 
 By default (variable : $global:EnabledDockerDaemonTLS = $True) the SwarmMSKit tool will automatically configure your Docker Swarm for TLS, all the Docker Engine hosts (client, swarm manager(s) and swarm workers) have a copy of the CA’s certificate as well as their own key-pair signed by the CA.
 In this case, all the client certificates are automatically generated in this folder :
-######$env:USERPROFILE\.SwarmMSKit
+######$env:USERPROFILE\\.SwarmMSKit
 
 Finally, the UI Swarm Administration Web (Portainer) and the UI Nexus OSS (Private Registry) are automatically open in your default web browser and we generated in your desktop a file called SwarmMSKIT-Check.cmd for testing the installation and configuration of all the tools (consul, vault, docker swarm and running a container to the swarm !)
 ######$env:USERPROFILE\Desktop\SwarmMSKIT-Check.cmd
