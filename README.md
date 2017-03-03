@@ -274,7 +274,7 @@ Create a batch file (env.cmd) it with these environement variables like this :
 
 	@echo off
 	set DOCKER_TLS_VERIFY=1
-	set DOCKER_CERT_PATH=%~dp0
+	set DOCKER_CERT_PATH=%USERPROFILE%\\.SwarmMSKit
 	set DOCKER_HOST=tcp://10.1.0.24:2017
 
 In this example, the swarm manager have the @IP:10.1.0.24 and the swarm cluster port ist 2017
