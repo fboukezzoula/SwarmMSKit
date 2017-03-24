@@ -11,7 +11,7 @@
     * [Beginning with SwarmMSKit](#SwarmMSKit-Beginning)
 4. [Usage - SwarmMSKit](#SwarmMSKit-Usage)
 5. [Usage - SwarmMSKit with TLS Authentication](#SwarmMSKit-Usage)
-6. [Video Tutorial](#SwarmMSKit-Youtube channel)
+6. [Video Tutorial - SwarmMSKit-Youtube channel]
 
 SwarmMSKit - Overview
 -----
