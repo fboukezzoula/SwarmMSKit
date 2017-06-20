@@ -72,7 +72,7 @@ $global:ContainerHostName = "Nano-"
 #How many Members/VM NanoServer will be deploy in your Cluster Swarm ?
 $global:ServersInCluster   = 3
 
-# Our dedicated TCP POrt for our Cluster Swarm Service
+# Our dedicated TCP Port for our Cluster Swarm Service
 $global:SwarmClusterPort = "2017"
 
 # Set firewall rules for all our Cluster : Docker daemon, swarm, consul, veualt, registry, file sharing, winrm, etc ...
